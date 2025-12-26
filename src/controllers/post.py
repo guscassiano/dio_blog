@@ -3,7 +3,7 @@ from src.security import login_required
 from src.services.post import PostService
 from src.views.post import PostOut
 
-from fastapi import APIRouter, Depends, status
+from fastapi import APIRouter, Depends, HTTPException, status
 
 router = APIRouter(prefix="/posts", tags=["Posts"], dependencies=[Depends(login_required)])
 service = PostService()
@@ -25,7 +25,7 @@ async def create_post(post: PostIn):
 
 @router.get("/{id}", response_model=PostOut)
 async def read_post(id: int):
-    return await service.read(id)
+        return await service.read(id)
 
 
 @router.patch("/{id}", response_model=PostOut)
