@@ -1,5 +1,3 @@
-from datetime import datetime, timezone
-
 from src.database import database
 from src.models.post import posts
 from src.schemas.post import PostIn, PostUpdateIn
@@ -14,15 +12,10 @@ class PostService:
         return await database.fetch_all(query)
 
     async def create(self, post: PostIn) -> int:
-        # Garantir que published_at seja aware (com timezone UTC)
-        published_at = post.published_at
-        if published_at is None and post.published:
-            published_at = datetime.now(timezone.utc)
-
         command = posts.insert().values(
             title=post.title,
             content=post.content,
-            published_at=published_at,
+            published_at=post.published_at,
             published=post.published,
         )
         return await database.execute(command)
@@ -36,10 +29,6 @@ class PostService:
             raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Post not found")
 
         data = post.model_dump(exclude_unset=True)
-
-        # Garantir que published_at seja aware se fornecido
-        if "published_at" in data and data["published_at"] is None and data.get("published"):
-            data["published_at"] = datetime.now(timezone.utc)
 
         command = posts.update().where(posts.c.id == id).values(**data)
         await database.execute(command)
