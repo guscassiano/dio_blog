@@ -5,6 +5,7 @@ from src.database import database, engine, metadata
 from src.expections import NotFoundPostError
 
 from fastapi import FastAPI, Request
+from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 
@@ -61,6 +62,14 @@ You will be able:
     openapi_tags=tags_metadata,
     servers=servers,
     lifespan=lifespan,
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
 )
 
 app.include_router(post.router, tags=["Post"])
