@@ -1,5 +1,3 @@
-import asyncio
-import os
 import sys
 from pathlib import Path
 
@@ -9,7 +7,9 @@ from httpx import ASGITransport, AsyncClient
 # Adicionar o diretório raiz do projeto ao path para que os imports funcionem
 sys.path.insert(0, str(Path(__file__).parent.parent))
 
-os.environ.setdefault("DATABASE_URL", f"sqlite:///tests.db")
+from src.config import settings
+
+settings.database_url = "sqlite:///tests.db"
 
 
 @pytest_asyncio.fixture
@@ -35,7 +35,9 @@ async def client(db):
         "access_token": "application/json",
         "Content-Type": "application/json",
     }
-    async with AsyncClient(base_url="https://test", transport=transport, headers=headers) as client:
+    async with AsyncClient(
+        base_url="https://test", transport=transport, headers=headers
+    ) as client:
         yield client
 
 
@@ -53,4 +55,6 @@ async def populate_posts(db):
     service = PostService()
     await service.create(PostIn(title="post 1", content="some content", published=True))
     await service.create(PostIn(title="post 2", content="some content", published=True))
-    await service.create(PostIn(title="post 3", content="some content", published=False))
+    await service.create(
+        PostIn(title="post 3", content="some content", published=False)
+    )
