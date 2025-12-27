@@ -5,7 +5,7 @@ from src.views.post import PostOut
 
 from fastapi import APIRouter, Depends, HTTPException, status
 
-router = APIRouter(prefix="/posts", tags=["Posts"], dependencies=[Depends(login_required)])
+router = APIRouter(prefix="/posts", dependencies=[Depends(login_required)])
 service = PostService()
 
 

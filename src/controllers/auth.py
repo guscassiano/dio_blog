@@ -4,7 +4,7 @@ from src.views.auth import LoginOut
 
 from fastapi import APIRouter
 
-router = APIRouter(prefix="/auth", tags=["Auth"])
+router = APIRouter(prefix="/auth")
 
 
 @router.post("/login", response_model=LoginOut)
