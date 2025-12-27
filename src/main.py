@@ -35,7 +35,7 @@ tags_metadata = [
 ]
 
 servers = [
-    {"url": "https://locahost:8000", "description": "Staging environment"},
+    {"url": "http://localhost:8000", "description": "Staging environment"},
     {
         "url": "https://dio-blog-y7fj.onrender.com",
         "description": "Production environment",
