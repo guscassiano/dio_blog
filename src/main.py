@@ -1,23 +1,9 @@
-from contextlib import asynccontextmanager
-
-from src.controllers import auth, post
-from src.database import database, engine, metadata
-from src.expections import NotFoundPostError
-
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-
-@asynccontextmanager
-async def lifespan(app: FastAPI):
-    from src.models.post import posts
-
-    metadata.create_all(engine)
-    await database.connect()
-    yield
-    await database.disconnect()
-
+from src.controllers import auth, post
+from src.expections import NotFoundPostError
 
 tags_metadata = [
     {
@@ -61,7 +47,6 @@ You will be able:
     summary="Personal blog API. To created and read posts.",
     openapi_tags=tags_metadata,
     servers=servers,
-    lifespan=lifespan,
 )
 
 app.add_middleware(
