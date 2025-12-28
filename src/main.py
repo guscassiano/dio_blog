@@ -1,9 +1,20 @@
+from contextlib import asynccontextmanager
+
 from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
 from src.controllers import auth, post
+from src.database import database
 from src.expections import NotFoundPostError
+
+
+@asynccontextmanager
+async def lifespan(app: FastAPI):
+    await database.connect()
+    yield
+    await database.disconnect()
+
 
 tags_metadata = [
     {
@@ -47,6 +58,7 @@ You will be able:
     summary="Personal blog API. To created and read posts.",
     openapi_tags=tags_metadata,
     servers=servers,
+    lifespan=lifespan,
 )
 
 app.add_middleware(
