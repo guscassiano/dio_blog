@@ -22,7 +22,7 @@ jobs:
             - name: Instalar o Python
               uses: actions/setup-python@v5
               with:
-                python-version: "3.12"
+                python-version: "3.14"
 
             - name: Instalar o Poetry
               run: pipx install poetry
@@ -30,7 +30,7 @@ jobs:
             - name: Configurar o cache do Poetry
               uses: actions/setup-python@v5
               with:
-                python-version: "3.12"
+                python-version: "3.14"
                 cache: "poetry"
 
             - name: Instalar dependências do projeto
