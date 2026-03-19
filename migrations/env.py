@@ -16,6 +16,7 @@ if config.config_file_name is not None:
 
 from src.database import engine, metadata
 from src.models.post import posts
+from src.models.user import users
 
 # add your model's MetaData object here
 # for 'autogenerate' support

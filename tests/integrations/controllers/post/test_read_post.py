@@ -1,14 +1,15 @@
+from fastapi import status
 from httpx import AsyncClient
 
-from fastapi import status
 
-
-async def test_read_post_success(client: AsyncClient, access_token: str, populate_posts):
+async def test_read_post_success(
+    client: AsyncClient, access_token: str, populate_posts
+):
     headers = {"Authorization": f"Bearer {access_token}"}
     post_id = 1
 
     response = await client.get(f"/posts/{post_id}", headers=headers)
-
+    print(response.json())
     assert response.status_code == status.HTTP_200_OK
     assert response.json()["id"] == post_id
 
@@ -22,7 +23,9 @@ async def test_read_post_not_authenticated_fail(client: AsyncClient, populate_po
     assert response.json()["detail"] == "Invalid authorization code."
 
 
-async def test_read_post_not_found_fail(client: AsyncClient, access_token: str, populate_posts):
+async def test_read_post_not_found_fail(
+    client: AsyncClient, access_token: str, populate_posts
+):
     headers = {"Authorization": f"Bearer {access_token}"}
     post_id = 4
 

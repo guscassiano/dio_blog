@@ -1,6 +1,5 @@
-from httpx import AsyncClient
-
 from fastapi import status
+from httpx import AsyncClient
 
 
 async def test_create_post_success(client: AsyncClient, access_token: str):
@@ -8,7 +7,7 @@ async def test_create_post_success(client: AsyncClient, access_token: str):
     data = {
         "title": "new post 1",
         "content": "some content",
-        "published_at": "2025-12-22T22:03:00.000Z",
+        "published_at": "2026-03-18T12:03:00.000Z",
         "published": True,
     }
 

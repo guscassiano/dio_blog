@@ -4,9 +4,9 @@ from fastapi import FastAPI, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.responses import JSONResponse
 
-from src.controllers import auth, post
+from src.controllers import auth, post, user
 from src.database import database
-from src.expections import NotFoundPostError
+from src.expections import ForbiddenPostError, NotFoundPostError
 
 
 @asynccontextmanager
@@ -24,10 +24,10 @@ tags_metadata = [
     {
         "name": "Post",
         "description": "Operations to keep posts.",
-        "externalDocs": {
-            "description": "Items external docs",
-            "url": "https://fastapi.tiangolo.com/",
-        },
+    },
+    {
+        "name": "User",
+        "description": "User operations.",
     },
 ]
 
@@ -41,7 +41,7 @@ servers = [
 
 app = FastAPI(
     title="BlogAPI",
-    version="1.0.2",
+    version="1.0.3",
     description="""
 Blog API to help you create a personal blog. 🚀
 
@@ -49,13 +49,25 @@ Blog API to help you create a personal blog. 🚀
 
 You will be able:
 
+* **Read all posts**
 * **Create posts**
+* **Read only the user's posts**
 * **Read posts by id**
 * **Update posts**
 * **Delete posts**
-* **Limit quantity daily posts** (_not implemented_)
+
+## Users
+
+You will be able:
+
+* **Create users**
+* **Read the user's own**
+* **Read users by id**
+* **Update users**
+* **Delete users**
+* **Read all users**
 """,
-    summary="Personal blog API. To created and read posts.",
+    summary="Personal blog API. To created, read, update and delete users and posts.",
     openapi_tags=tags_metadata,
     servers=servers,
     lifespan=lifespan,
@@ -71,8 +83,14 @@ app.add_middleware(
 
 app.include_router(post.router, tags=["Post"])
 app.include_router(auth.router, tags=["Auth"])
+app.include_router(user.router, tags=["User"])
 
 
 @app.exception_handler(NotFoundPostError)
 async def not_found_post_exception_handler(request: Request, exc: NotFoundPostError):
+    return JSONResponse(status_code=exc.status_code, content={"detail": exc.message})
+
+
+@app.exception_handler(ForbiddenPostError)
+async def not_found_post_exception_handler(request: Request, exc: ForbiddenPostError):
     return JSONResponse(status_code=exc.status_code, content={"detail": exc.message})
