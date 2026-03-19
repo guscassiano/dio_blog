@@ -73,8 +73,8 @@ async def access_token(client: AsyncClient, test_user: dict):
 
 
 @pytest_asyncio.fixture
-async def second_user_token(client: AsyncClient, db):
-    await client.post(
+async def second_user(client: AsyncClient, db):
+    response = await client.post(
         "/users/register",
         json={
             "name": "User Two",
@@ -83,8 +83,18 @@ async def second_user_token(client: AsyncClient, db):
             "password": "password123",
         },
     )
+
+    user = response.json()
+    user["password"] = "password123"
+
+    return user
+
+
+@pytest_asyncio.fixture
+async def second_user_token(client: AsyncClient, second_user: dict):
     response = await client.post(
-        "/auth/login", json={"email": "user2@example.com", "password": "password123"}
+        "/auth/login",
+        json={"email": second_user["email"], "password": second_user["password"]},
     )
     return response.json()["access_token"]
 

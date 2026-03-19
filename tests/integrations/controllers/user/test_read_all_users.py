@@ -10,10 +10,10 @@ async def test_read_all_users_success(
 
     assert response.status_code == status.HTTP_200_OK
     data = response.json()
-    print(data)
+
+    assert len(data) == 2
     assert data[0]["nickname"] == "test_user"
-    assert "email" not in data
-    assert "created_at" not in data
+    assert data[1]["nickname"] == "usertwo"
 
 
 async def test_read_all_users_without_token(client: AsyncClient):

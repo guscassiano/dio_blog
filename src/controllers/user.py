@@ -62,7 +62,9 @@ async def get_user(user_id: int):
     return user
 
 
-@router.get("", response_model=list[UserReadView])
+@router.get(
+    "", response_model=list[UserReadView], dependencies=[Depends(login_required)]
+)
 async def list_users():
     """List all users"""
     return await UserService.get_all_users()
