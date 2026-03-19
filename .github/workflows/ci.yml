@@ -1,0 +1,40 @@
+name: CI - Testes Automatizados
+
+on:
+    push:
+        branches:
+            - main
+            - master
+    pull_request:
+        branches:
+            - main
+            - master
+
+jobs:
+    testes:
+        name: Rodar Pytest
+        runs-on: ubuntu-latest
+
+        steps:
+            - name: Baixar código do repositório
+              uses: actions/checkout@v4
+
+            - name: Instalar o Python
+              uses: actions/setup-python@v5
+              with:
+                python-version: "3.12"
+
+            - name: Instalar o Poetry
+              run: pipx install poetry
+
+            - name: Configurar o cache do Poetry
+              uses: actions/setup-python@v5
+              with:
+                python-version: "3.12"
+                cache: "poetry"
+
+            - name: Instalar dependências do projeto
+              run: poetry install
+
+            - name: Rodar a suite de teste!
+              run: poetry run pytest
