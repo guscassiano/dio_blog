@@ -37,4 +37,7 @@ jobs:
               run: poetry install
 
             - name: Rodar a suite de teste!
+              env:
+                DATABASE_URL: "sqlite:///tests.db"
+                ENVIRONMENT: "local"
               run: poetry run pytest
