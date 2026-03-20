@@ -10,6 +10,13 @@ class Settings(BaseSettings):
 
     database_url: str
     environment: str = "production"
+    email_username: str
+    email_password: str
+    email_from: str
+    email_port: int = 587
+    email_server: str = "smtp.gmail.com"
+    email_starttls: bool = True
+    email_ssl_tls: bool = False
 
 
 settings = Settings()

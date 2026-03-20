@@ -1,4 +1,4 @@
-from fastapi import APIRouter, HTTPException, status
+from fastapi import APIRouter, BackgroundTasks, HTTPException, status
 
 from src.schemas.auth import ForgotPasswordIn, LoginIn, ResetPasswordIn
 from src.security import (
@@ -6,6 +6,7 @@ from src.security import (
     sign_jwt,
     verify_password_reset_token,
 )
+from src.services.email import send_reset_password_email
 from src.services.user import UserService
 from src.views.auth import LoginOut
 
@@ -36,19 +37,14 @@ async def login(data: LoginIn):
 
 
 @router.post("/forgot-password", status_code=status.HTTP_202_ACCEPTED)
-async def forgot_password(data: ForgotPasswordIn):
+async def forgot_password(data: ForgotPasswordIn, background_tasks: BackgroundTasks):
     """Generates the token and simulates sending an email"""
     user = await UserService.get_user_by_email(data.email)
 
     if user:
         token = create_password_reset_token(email=data.email)
 
-        print("\n" + "=" * 50)
-        print("📧 SIMULAÇÃO DE ENVIO DE EMAIL")
-        print(f"Para: {data.email}")
-        print("Assunto: Recuperação de Senha")
-        print(f"Seu token de recuperação é:\n{token}")
-        print("=" * 50 + "\n")
+        background_tasks.add_task(send_reset_password_email, data.email, token)
 
     return {"message": "If the email is registrered, a password token has been sent."}
 
