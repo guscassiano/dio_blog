@@ -13,10 +13,10 @@ class Settings(BaseSettings):
     email_username: str
     email_password: str
     email_from: str
-    email_port: int = 587
+    email_port: int = 465
     email_server: str = "smtp.gmail.com"
-    email_starttls: bool = True
-    email_ssl_tls: bool = False
+    email_starttls: bool = False
+    email_ssl_tls: bool = True
 
 
 settings = Settings()
