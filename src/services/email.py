@@ -1,3 +1,5 @@
+import logging
+
 from fastapi_mail import ConnectionConfig, FastMail, MessageSchema, MessageType
 
 from src.config import settings
@@ -37,4 +39,10 @@ async def send_reset_password_email(email_to: str, token: str):
     )
 
     fm = FastMail(conf)
-    await fm.send_message(message)
+
+    try:
+        await fm.send_message(message)
+        logging.info(f"E-mail enviado com sucesso para {email_to}")
+    except Exception as e:
+        logging.warning(f"Bloqueio SMTP detectado (Render Free Tier).")
+        logging.warning(f"E-mail simulado para {email_to}. O Token é: {token}")
