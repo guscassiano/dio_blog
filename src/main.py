@@ -19,7 +19,7 @@ async def lifespan(app: FastAPI):
 tags_metadata = [
     {
         "name": "Auth",
-        "description": "Operations to authentication.",
+        "description": "Operations for authentication.",
     },
     {
         "name": "Post",
@@ -32,11 +32,11 @@ tags_metadata = [
 ]
 
 servers = [
-    {"url": "http://localhost:8000", "description": "Staging environment"},
     {
         "url": "https://dio-blog-y7fj.onrender.com",
         "description": "Production environment",
     },
+    {"url": "http://localhost:8000", "description": "Staging environment"},
 ]
 
 app = FastAPI(
@@ -67,10 +67,15 @@ You will be able:
 * **Delete users**
 * **Read all users**
 """,
-    summary="Personal blog API. To created, read, update and delete users and posts.",
+    summary="Personal blog API. Create, read, update and delete users and posts.",
     openapi_tags=tags_metadata,
     servers=servers,
     lifespan=lifespan,
+    contact={
+        "name": "Gustavo",
+        "url": "https://github.com/guscassiano",  # Coloque seu GitHub aqui!
+        "email": "gucpinto26@gmail.com",
+    },
 )
 
 app.add_middleware(
@@ -92,5 +97,5 @@ async def not_found_post_exception_handler(request: Request, exc: NotFoundPostEr
 
 
 @app.exception_handler(ForbiddenPostError)
-async def not_found_post_exception_handler(request: Request, exc: ForbiddenPostError):
+async def forbidden_post_exception_handler(request: Request, exc: ForbiddenPostError):
     return JSONResponse(status_code=exc.status_code, content={"detail": exc.message})

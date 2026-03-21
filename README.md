@@ -64,6 +64,7 @@ Este projeto foi desenvolvido no bootcamp oferecedo pela **Luíza Labs em parcei
     * Swagger UI: http://localhost:8000/docs
     * ReDoc: http://localhost:8000/redoc
 
+   > ⚠️ **Atenção (Teste Local):** Como a API possui múltiplos ambientes configurados, ao acessar o Swagger na sua máquina, lembre-se de clicar no menu dropdown **"Servers"** (no topo da página) e selecionar a opção `http://localhost:8000 - Staging environment`. Caso contrário, os seus testes locais tentarão bater no banco de dados de produção!
 ## 🧪 Como Rodar os Testes
 
 O projeto possui uma suíte robusta de testes de integração cobrindo Happy Paths e validações de segurança (Sad Paths).
